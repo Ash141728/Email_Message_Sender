@@ -30,6 +30,7 @@ public class DoctorController {
         try{
             DoctorDto doctor = doctorService.createDoctor(doctorDto);
             logger.info("Doctor registered successfully");
+            logger.info("SMS sent successfully");
             return new ResponseEntity<>(doctor, HttpStatus.CREATED);
         }catch (Exception e) {
             logger.error("An error occurred while creating a doctor: {}", e.getMessage(), e);

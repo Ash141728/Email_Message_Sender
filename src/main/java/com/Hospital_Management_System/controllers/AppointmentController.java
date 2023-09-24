@@ -31,6 +31,7 @@ public class AppointmentController {
         try{
             AppointmentDto appointment = appointmentService.createAppointment(appointmentDto);
             logger.info("Appointment registered successfully");
+            logger.info("SMS sent successfully");
             return new ResponseEntity<>(appointment, HttpStatus.CREATED);
         }catch (Exception e) {
             logger.error("An error occurred while creating a appointment: {}", e.getMessage(), e);

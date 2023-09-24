@@ -1,6 +1,7 @@
 package com.Hospital_Management_System.services.impl;
 
 
+import com.Hospital_Management_System.api_integration.SMSService;
 import com.Hospital_Management_System.entities.Doctor;
 import com.Hospital_Management_System.entities.Patient;
 import com.Hospital_Management_System.exceptions.DoctorException;
@@ -31,11 +32,18 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private SMSService smsService;
+
     @Override
     public DoctorDto createDoctor(DoctorDto doctorDto) {
         Doctor doctor = mapToEntity(doctorDto);
         Doctor save = doctorRepository.save(doctor);
+        // Integrate Twilio SMS service
+        String smsMessage = "Welcome, " + doctor.getName() + "! Thank you for registering with us.";
+        smsService.sendSMS(doctor.getPhoneNumber(), smsMessage);
         return mapToDto(save);
+
     }
 
     @Override

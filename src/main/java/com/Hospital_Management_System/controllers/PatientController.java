@@ -29,6 +29,7 @@ public class PatientController {
         try {
             PatientDto patient = patientService.createPatient(patientDto);
             logger.info("Patient created successfully.");
+            logger.info("SMS sent successfully");
             return new ResponseEntity<>(patient, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("An error occurred while creating a patient: {}", e.getMessage(), e);

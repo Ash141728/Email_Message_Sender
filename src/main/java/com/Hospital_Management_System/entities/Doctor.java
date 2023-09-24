@@ -27,8 +27,9 @@ public class Doctor {
     @NotBlank(message = "Specialization is required")
     private String specialization;
 
-    @Pattern(regexp = "\\d{10}", message = "Phone number must be a 10-digit number")
+    @Pattern(regexp = "^\\+[0-9]{1,3}[0-9]{10}$", message = "Phone number must start with a '+' and have 10 additional digits")
     private String phoneNumber;
+
 
     @Email(message = "Invalid email address")
     private String email;

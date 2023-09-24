@@ -1,5 +1,6 @@
 package com.Hospital_Management_System.services.impl;
 
+import com.Hospital_Management_System.api_integration.SMSService;
 import com.Hospital_Management_System.entities.Appointment;
 import com.Hospital_Management_System.entities.Doctor;
 import com.Hospital_Management_System.entities.MedicalRecord;
@@ -9,6 +10,7 @@ import com.Hospital_Management_System.exceptions.DoctorException;
 import com.Hospital_Management_System.exceptions.PatientException;
 import com.Hospital_Management_System.payload.AppointmentDto;
 import com.Hospital_Management_System.repositories.AppointmentRepository;
+import com.Hospital_Management_System.repositories.AppointmentSlotRepository;
 import com.Hospital_Management_System.repositories.DoctorRepository;
 import com.Hospital_Management_System.repositories.PatientRepository;
 import com.Hospital_Management_System.services.AppointmentService;
@@ -39,6 +41,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    private SMSService smsService;
+
     @Override
     public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
         Long patientId = appointmentDto.getPatientId();
@@ -56,6 +61,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setAppointmentDateTime(appointmentDto.getAppointmentDateTime());
 
         Appointment save = appointmentRepository.save(appointment);
+            // Integrate Twilio SMS service
+        String smsMessage = "Hi! "+ patient.getName()+ " your appointment with "+doctor.getName()+
+                                                " is scheduled at "+ appointment.getAppointmentDateTime()+" Thank you!";
+        smsService.sendSMS(patient.getPhoneNumber(), smsMessage);
+
         return mapToDto(save);
 
     }
